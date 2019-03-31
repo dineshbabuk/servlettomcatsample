@@ -54,9 +54,10 @@
 
 	<profiles>
 		<profile>
+			<!-- Execute the maven goal with -Pintegration to add test classes and resources inside war-->
 			<id>integration</id>
 			<build>
-				<!-- finalName>war-it-test-integration</finalName-->
+				<!-- finalName>war-it-test-integration</finalName -->
 				<plugins>
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -75,6 +76,39 @@
 								<goals>
 									<goal>run</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+		<!-- Execute the maven goal with -resourcecopy to add test classes and resources inside war-->
+			<id>resourcecopy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.5</version>
+						<executions>
+							<execution>
+								<phase>process-test-classes</phase>
+								<id>test-classes</id>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<overwrite>false</overwrite>
+									<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+									<!-- outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory-->
+									<!-- Choose either of the above based on your needs -->
+									<resources>
+										<resource>
+											<directory>${project.build.directory}/test-classes</directory>
+										</resource>
+									</resources>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
